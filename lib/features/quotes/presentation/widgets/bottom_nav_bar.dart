@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/constants/app_strings.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -32,16 +33,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap: onTap,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.wb_sunny),
-            label: 'TODAY',
+            icon: Icon(Icons.explore),
+            label: AppStrings.discover,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'FAVORITES',
+            icon: Icon(Icons.bookmark),
+            label: AppStrings.saved,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: AppStrings.settings,
           ),
         ],
       ),
     );
   }
 }
-

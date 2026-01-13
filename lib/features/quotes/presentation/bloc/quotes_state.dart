@@ -22,17 +22,31 @@ class QuotesLoaded extends QuotesState {
 
   @override
   List<Object> get props => [quote, isFavorite];
+
+  QuotesLoaded copyWith({
+    Quote? quote,
+    bool? isFavorite,
+  }) {
+    return QuotesLoaded(
+      quote: quote ?? this.quote,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }
 
 class FavoritesLoading extends QuotesState {}
 
 class FavoritesLoaded extends QuotesState {
   final List<Quote> quotes;
+  final int timestamp; // Add timestamp to ensure state is always different
 
-  const FavoritesLoaded({required this.quotes});
+  FavoritesLoaded({
+    required this.quotes,
+    int? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
   @override
-  List<Object> get props => [quotes];
+  List<Object> get props => [quotes, timestamp];
 }
 
 class QuotesError extends QuotesState {
@@ -44,3 +58,20 @@ class QuotesError extends QuotesState {
   List<Object> get props => [message];
 }
 
+// State to track all liked quotes (maintains persistent like status)
+class LikedQuotesState extends QuotesState {
+  final Set<String> likedQuoteIds;
+
+  const LikedQuotesState({required this.likedQuoteIds});
+
+  @override
+  List<Object> get props => [likedQuoteIds];
+
+  LikedQuotesState copyWith({
+    Set<String>? likedQuoteIds,
+  }) {
+    return LikedQuotesState(
+      likedQuoteIds: likedQuoteIds ?? this.likedQuoteIds,
+    );
+  }
+}

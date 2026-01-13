@@ -31,7 +31,7 @@ class QuotesLocalDataSourceImpl implements QuotesLocalDataSource {
         );
       }
     } catch (e) {
-      throw CacheFailure('Failed to save favorite quote: ${e.toString()}');
+      throw const CacheFailure('Failed to save favorite quote');
     }
   }
 
@@ -43,7 +43,7 @@ class QuotesLocalDataSourceImpl implements QuotesLocalDataSource {
       );
       return quotesList.map((q) => QuoteModel.fromString(q)).toList();
     } catch (e) {
-      throw CacheFailure('Failed to get favorite quotes: ${e.toString()}');
+      throw const CacheFailure('Failed to get favorite quotes');
     }
   }
 
@@ -58,7 +58,7 @@ class QuotesLocalDataSourceImpl implements QuotesLocalDataSource {
         quotesList,
       );
     } catch (e) {
-      throw CacheFailure('Failed to remove favorite quote: ${e.toString()}');
+      throw const CacheFailure('Failed to remove favorite quote');
     }
   }
 }

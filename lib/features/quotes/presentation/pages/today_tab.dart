@@ -18,6 +18,17 @@ class TodayTab extends StatefulWidget {
 class _TodayTabState extends State<TodayTab> {
   Quote? _lastQuote;
   bool _lastIsFavorite = false;
+  bool _hasLoadedDailyQuote = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load daily quote when tab is first opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<QuotesBloc>().add(const GetDailyQuoteEvent());
+      _hasLoadedDailyQuote = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +237,7 @@ class _TodayTabState extends State<TodayTab> {
               icon: Icons
                   .ios_share, // Use iOS style share icon if available, or just share
               onTap: () {
-                ShareHelper.shareQuote(quote);
+                ShareHelper.shareQuote(quote, context: context);
               },
             ),
           ],
@@ -239,6 +250,16 @@ class _TodayTabState extends State<TodayTab> {
             color: AppTheme.primaryBlue,
             fontSize: 14,
             fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Daily Quote label
+        Text(
+          'Quote of the Day',
+          style: GoogleFonts.poppins(
+            color: AppTheme.textSecondary,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

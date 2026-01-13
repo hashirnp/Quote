@@ -45,5 +45,38 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Photo Library Permissions -->
+	<!-- NSPhotoLibraryAddUsageDescription: Required for iOS 11+ to save images to photo library -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Quote needs access to save quote cards to your photo library so you can share them with others.</string>
+	<!-- NSPhotoLibraryUsageDescription: Required for iOS 6-10 to access photo library -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Quote needs access to save quote cards to your photo library so you can share them with others.</string>
+	<!-- Network Access (for fetching quotes) -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<!-- URL Scheme for Deep Linking -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>quoteapp</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.quote.app</string>
+		</dict>
+	</array>
 </dict>
 </plist>
