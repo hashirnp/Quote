@@ -1,200 +1,285 @@
 # Quote App - Daily Inspiration
 
-A beautiful Flutter application for displaying daily inspirational quotes with favorites and sharing functionality. Built with modern architecture patterns and AI-assisted development.
+A beautiful Flutter application for displaying daily inspirational quotes with favorites, collections, sharing, and home screen widgets. Built with modern architecture patterns and clean code principles.
 
 ## 📱 Features
 
-- **Random Quotes**: Display daily inspirational quotes from ZenQuotes API
-- **Favorites**: Save and manage your favorite quotes with persistent storage
-- **Search**: Filter favorites by author or keyword
-- **Share**: Share quotes via system share sheet
-- **Dark Theme**: Beautiful, modern dark UI design
-- **Smooth Navigation**: Tab-based navigation with state preservation
+### Core Features
+- **Daily Quotes**: Unique quote of the day based on day of year (365+ quotes)
+- **Random Quotes**: Get new random quotes on demand
+- **Favorites**: Save and manage your favorite quotes with cloud sync
+- **Collections**: Organize quotes into custom collections
+- **Search & Filter**: Search quotes by keyword, author, or category
+- **Share & Export**: Share quotes as text or beautiful image cards
+- **Home Screen Widget**: Daily quote widget for iOS and Android
+- **Daily Notifications**: Local push notifications for daily quotes
+
+### Personalization
+- **Dark/Light Mode**: System, light, or dark theme
+- **Accent Colors**: Choose from Blue, Green, or Purple
+- **Font Size**: Adjustable quote text size
+- **Settings Sync**: Settings persist locally and sync to profile
+
+### Technical Features
+- **Authentication**: Email/password sign up and sign in
+- **Cloud Sync**: Supabase backend for favorites, collections, and likes
+- **Offline Support**: Local caching for offline access
+- **Deep Linking**: Widget taps open app to daily quote
 
 ## 🏗️ Architecture
 
-This project follows **Feature-oriented MVVM** architecture with clean separation of concerns:
+This project follows **Clean Architecture** with **Feature-oriented** organization:
 
-- **State Management**: BLoC (Business Logic Component) pattern
-- **Architecture**: Feature-oriented MVVM
-- **Network Layer**: Dio with reusable client abstraction
-- **Dependency Injection**: get_it service locator
-- **Persistence**: SharedPreferences for local storage
+### Architecture Layers
+- **Presentation**: BLoC pattern for state management, UI pages and widgets
+- **Domain**: Business logic, entities, use cases, and repository interfaces
+- **Data**: Repository implementations, data sources (remote/local), and models
+
+### State Management
+- **BLoC Pattern**: Predictable state management with `flutter_bloc`
+- **Optimistic Updates**: Instant UI updates with background sync
+- **In-Memory Caching**: Efficient like/favorite status caching
 
 ### Project Structure
 
 ```
 lib/
-├── core/                    # Core utilities and infrastructure
-│   ├── di/                 # Dependency injection setup
-│   ├── network/             # Network layer (Dio client)
-│   ├── storage/             # Local storage abstraction
-│   ├── theme/               # App theme configuration
-│   └── utils/               # Utility helpers
+├── core/                          # Core utilities and infrastructure
+│   ├── config/                   # App configuration (Supabase)
+│   ├── constants/                # App-wide constants and strings
+│   ├── di/                       # Dependency injection (get_it)
+│   ├── errors/                   # Error handling and failures
+│   ├── navigation/              # Navigation utilities
+│   ├── network/                 # Network layer (Dio client)
+│   ├── services/                # Core services (notifications, widgets)
+│   ├── storage/                 # Local storage abstraction
+│   ├── theme/                   # Theme configuration
+│   └── utils/                   # Utility helpers
 └── features/
-    └── quotes/              # Quotes feature module
-        ├── data/            # Data layer (repositories, data sources)
-        ├── domain/          # Domain layer (entities, use cases)
-        └── presentation/   # Presentation layer (BLoC, pages, widgets)
+    ├── auth/                    # Authentication feature
+    │   ├── data/               # Auth data layer
+    │   ├── domain/             # Auth domain layer
+    │   └── presentation/       # Auth UI and BLoC
+    ├── quotes/                 # Quotes feature
+    │   ├── data/               # Quotes data layer
+    │   ├── domain/             # Quotes domain layer
+    │   └── presentation/       # Quotes UI and BLoC
+    └── settings/               # Settings feature
+        ├── data/               # Settings data layer
+        ├── domain/             # Settings domain layer
+        └── presentation/       # Settings UI and BLoC
 ```
 
 ## 🚀 Setup Instructions
 
 ### Prerequisites
 
-- Flutter SDK (>=3.0.0)
-- Dart SDK (>=3.0.0)
-- Android Studio / VS Code with Flutter extensions
-- iOS Simulator / Android Emulator or physical device
+- **Flutter SDK**: >=3.0.0 (check with `flutter --version`)
+- **Dart SDK**: >=3.0.0
+- **Android Studio** / **VS Code** with Flutter extensions
+- **iOS Simulator** / **Android Emulator** or physical device
+- **Xcode** (for iOS development, macOS only)
+- **CocoaPods** (for iOS dependencies)
 
-### Installation
+### Installation Steps
 
 1. **Clone the repository**
-
    ```bash
    git clone <repository-url>
    cd Quote
    ```
 
-2. **Install dependencies**
-
+2. **Install Flutter dependencies**
    ```bash
    flutter pub get
    ```
 
-3. **Run the app**
+3. **Configure Supabase** (if using cloud features)
+   - Update `lib/core/config/supabase_config.dart` with your Supabase URL and anon key
+   - Or set up environment variables
+
+4. **iOS Setup** (macOS only)
    ```bash
+   cd ios
+   pod install
+   cd ..
+   ```
+
+5. **Run the app**
+   ```bash
+   # Android
    flutter run
+
+   # iOS (macOS only)
+   flutter run -d ios
    ```
 
 ### Build for Production
 
-**Android:**
-
+**Android APK:**
 ```bash
 flutter build apk --release
 ```
 
-**iOS:**
+**Android App Bundle:**
+```bash
+flutter build appbundle --release
+```
 
+**iOS:**
 ```bash
 flutter build ios --release
 ```
 
-## 🤖 AI-Assisted Development
+## 📱 Platform-Specific Setup
 
-This project was developed using AI-powered tools to accelerate development and ensure code quality.
+### Android
 
-### AI Coding Approach
+#### Permissions
+All required permissions are configured in `android/app/src/main/AndroidManifest.xml`:
+- Internet access
+- Notification permissions (Android 13+)
+- Photo library access (for saving quote cards)
 
-The development process leveraged AI assistance for:
+#### Widget Setup
+The Android widget is automatically configured. To add it:
+1. Long press home screen → Widgets
+2. Find "Quote" → "Daily Quote"
+3. Add to home screen
 
-1. **Architecture Design**: AI helped design the feature-oriented MVVM structure with proper separation of concerns
-2. **Code Generation**: Initial boilerplate and widget structures were generated with AI assistance
-3. **Code Refactoring**: AI assisted in breaking down large files into smaller, maintainable components
-4. **State Management**: BLoC pattern implementation was refined with AI guidance
-5. **UI Implementation**: UI components were created to match design specifications with AI assistance
-6. **UI Corrections**: Gemini was used extensively for UI corrections, layout adjustments, and pixel-perfect design implementation
-7. **Bug Fixing**: State preservation issues and navigation problems were identified and fixed with AI help
+### iOS
 
-### Development Workflow
+#### Widget Setup
+1. Open `ios/Runner.xcworkspace` in Xcode
+2. File → New → Target → Widget Extension
+3. Name: "DailyQuoteWidget"
+4. Copy code from `ios/DailyQuoteWidget/DailyQuoteWidget.swift`
+5. Configure App Groups:
+   - Runner target → Signing & Capabilities → Add "App Groups"
+   - Create group: `group.com.quote.app`
+   - Widget target → Add same App Group
+6. Build and run
 
-1. **Design Analysis**: Analyzed provided design images to understand UI requirements
-2. **Architecture Planning**: Used AI to plan the feature-oriented structure
-3. **Incremental Development**: Built features incrementally with AI code suggestions
-4. **Refactoring**: Continuously refactored code into smaller, reusable components
-5. **Testing & Debugging**: Used AI to identify and fix state management issues
+See `IOS_SETUP.md` and `WIDGET_SETUP.md` for detailed instructions.
 
-## 🛠️ AI Tools Used
+#### Permissions
+All required permissions are configured in `ios/Runner/Info.plist`:
+- Photo library access (for saving quote cards)
+- Notification permissions (requested at runtime)
 
-### 1. **Cursor**
+## 🔧 Configuration
 
-- **Purpose**: Primary AI-powered IDE for code generation and refactoring
-- **Usage**:
-  - Generated initial project structure
-  - Created BLoC implementations
-  - Refactored large files into smaller components
-  - Fixed state management issues
-  - Improved code organization
+### Supabase Configuration
+Update `lib/core/config/supabase_config.dart`:
+```dart
+class SupabaseConfig {
+  static const String supabaseUrl = 'YOUR_SUPABASE_URL';
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+}
+```
 
-### 2. **Google Stitches**
-
-- **Purpose**: Design-to-code conversion and UI implementation
-- **Usage**:
-  - Converted design mockups to Flutter widgets
-  - Matched UI components to design specifications
-  - Ensured pixel-perfect implementation
-
-### 3. **Gemini**
-
-- **Purpose**: UI corrections, code review, and problem-solving
-- **Usage**:
-  - UI corrections and refinements
-  - Pixel-perfect design implementation
-  - Layout adjustments and styling fixes
-  - Code quality improvements
-  - State management solutions
-  - Best practices guidance
-
-## 🎨 Design References
-
-### Design Tools
-
-- **Stitch Designs**: https://stitch.withgoogle.com/projects/1197147559682827139
-
-### UI Components
-
-- **Home Screen**: Large quote display with decorative quotation marks
-- **Favorites Screen**: List view with search functionality
-- **Navigation**: Bottom navigation bar with tab switching
-- **Theme**: Dark theme with blue accents
+### Notification Timezone
+Default timezone is set to `Asia/Kolkata` (IST). To change:
+- Update `lib/core/services/notification_service.dart`
+- Change `setLocalTimeZone('Asia/Kolkata')` to your timezone
 
 ## 📦 Dependencies
 
 ### Core Dependencies
-
 - `flutter_bloc: ^8.1.3` - State management
 - `equatable: ^2.0.5` - Value equality
 - `get_it: ^7.6.4` - Dependency injection
 - `dio: ^5.4.0` - HTTP client
-- `shared_preferences: ^2.2.2` - Local storage
-- `share_plus: ^7.2.1` - Share functionality
+- `supabase_flutter: ^2.0.0` - Backend services
+
+### UI & Theming
 - `google_fonts: ^6.2.0` - Custom fonts
+- `flutter_local_notifications: ^16.0.0` - Local notifications
+- `timezone: ^0.9.0` - Timezone support
 
-## 🔧 Key Features Implementation
+### Sharing & Media
+- `share_plus: ^7.2.1` - Share functionality
+- `screenshot: ^2.0.0` - Screenshot capture
+- `saver_gallery: ^1.0.0` - Save images to gallery
+- `permission_handler: ^11.0.0` - Permission management
 
-### State Management
+### Widgets
+- `home_widget: ^0.9.0` - Home screen widgets
 
-- Uses BLoC pattern for predictable state management
-- State preservation when switching between tabs
-- Proper error handling and loading states
+### Storage
+- `shared_preferences: ^2.2.2` - Local storage
+- `path_provider: ^2.1.0` - File system paths
 
-### Network Layer
+## 🧪 Testing
 
-- Reusable Dio client with interceptors
-- Abstract network client interface for testability
-- Error handling with custom failure types
+### Run Tests
+```bash
+flutter test
+```
 
-### Local Storage
+### Run with Coverage
+```bash
+flutter test --coverage
+```
 
-- SharedPreferences wrapper for type-safe storage
-- Persistent favorites storage
-- Clean abstraction for future database migration
+## 📝 Code Quality
 
-## 📝 Code Standards
-
+### Standards
 - **Naming**: Clear, descriptive names following Dart conventions
-- **Structure**: Feature-oriented organization
-- **Separation**: Clear boundaries between layers
-- **Reusability**: Reusable widgets and utilities
+- **Structure**: Feature-oriented organization with clear separation
+- **Error Handling**: Consistent error handling throughout
+- **No Hardcoded Strings**: All strings in `AppStrings` constants
 - **Documentation**: Inline comments for complex logic
+
+### Linting
+The project uses `flutter_lints` with custom rules:
+- Prefer const constructors
+- Avoid print statements (use `debugPrint`)
+- Prefer single quotes
+- Consistent code formatting
+
+### Code Organization
+- **Small, Focused Files**: Each file has a single responsibility
+- **Reusable Components**: Widgets and utilities are reusable
+- **Clean Architecture**: Clear boundaries between layers
+- **Dependency Injection**: All dependencies injected via get_it
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Widget not showing data:**
+- Check App Groups are configured (iOS)
+- Verify SharedPreferences keys match
+- Ensure widget is updated after app launch
+
+**Notifications not appearing:**
+- Check notification permissions are granted
+- Verify timezone is set correctly
+- Check notification scheduling logic
+
+**Photo library access denied:**
+- Check Info.plist has usage descriptions (iOS)
+- Verify permissions are requested before saving
+- Check AndroidManifest.xml permissions (Android)
+
+**Build errors:**
+- Run `flutter clean` then `flutter pub get`
+- For iOS: `cd ios && pod install && cd ..`
+- Check Flutter and Dart versions match requirements
+
+## 📚 Additional Documentation
+
+- `WIDGET_SETUP.md` - Detailed widget setup guide
+- `IOS_SETUP.md` - iOS-specific setup instructions
 
 ## 🙏 Acknowledgments
 
-- ZenQuotes API for providing quote data
-- Flutter team for the amazing framework
-- AI tools (Cursor, Google Stitches, Gemini) for development assistance
+- **Supabase** for backend services
+- **ZenQuotes API** for quote data fallback
+- **Flutter team** for the amazing framework
+- **Open source community** for excellent packages
 
 ---
 
-**Note**: This project was developed with AI assistance to demonstrate modern Flutter development practices and AI-powered development workflows.
+**Built with ❤️ using Flutter**

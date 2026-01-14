@@ -78,7 +78,7 @@ class QuoteCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: _getGradientForIndex(quote.hashCode),
+        gradient: _getGradientForIndex(context, quote.hashCode),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -264,9 +264,10 @@ class QuoteCard extends StatelessWidget {
   }
 
   void _showAddToCollectionDialog(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.cardBackground,
+      backgroundColor: theme.cardTheme.color,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -283,7 +284,7 @@ class QuoteCard extends StatelessWidget {
                       Text(
                         'No collections yet',
                         style: GoogleFonts.poppins(
-                          color: AppTheme.textPrimary,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
@@ -317,7 +318,7 @@ class QuoteCard extends StatelessWidget {
                       child: Text(
                         'Add to Collection',
                         style: GoogleFonts.poppins(
-                          color: AppTheme.textPrimary,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -338,13 +339,15 @@ class QuoteCard extends StatelessWidget {
                         title: Text(
                           collection.name,
                           style: GoogleFonts.poppins(
-                            color: AppTheme.textPrimary,
+                            color:
+                                Theme.of(context).textTheme.titleLarge?.color,
                           ),
                         ),
                         subtitle: Text(
                           '${collection.quoteCount} quotes',
                           style: GoogleFonts.poppins(
-                            color: AppTheme.textSecondary,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 12,
                           ),
                         ),
@@ -387,54 +390,30 @@ class QuoteCard extends StatelessWidget {
     );
   }
 
-  LinearGradient _getGradientForIndex(int index) {
-    final gradients = [
-      // Dark blue gradient
-      const LinearGradient(
+  LinearGradient _getGradientForIndex(BuildContext context, int index) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    if (isDark) {
+      // Dark theme gradient
+      return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
           Color(0xFF1A1A2E),
           Color(0xFF16213E),
         ],
-      ),
-      // Warm gradient (orange/pink to blue/purple)
-      const LinearGradient(
+      );
+    } else {
+      // Light theme gradient
+      return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFFFF6B6B),
-          Color(0xFF4ECDC4),
+          Color(0xFF4A90E2),
+          Color(0xFF6BA3E8),
         ],
-      ),
-      // Green/teal with particles effect
-      const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF2D5016),
-          Color(0xFF1A5F3F),
-        ],
-      ),
-      // Purple gradient
-      const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF6C5CE7),
-          Color(0xFFA29BFE),
-        ],
-      ),
-      // Blue gradient
-      const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF0984E3),
-          Color(0xFF74B9FF),
-        ],
-      ),
-    ];
-    return gradients[542573045.abs() % gradients.length];
+      );
+    }
   }
 }

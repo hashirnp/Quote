@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/quotes/presentation/pages/main_page.dart';
-import '../../features/quotes/presentation/bloc/quotes_bloc.dart';
 
 class AuthGuard extends StatefulWidget {
   const AuthGuard({super.key});
@@ -22,7 +19,7 @@ class _AuthGuardState extends State<AuthGuard> {
     // Listen to Supabase auth state changes
     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       final session = data.session;
-      log('Auth state changed - Session: ${session != null}');
+      debugPrint('Auth state changed - Session: ${session != null}');
       if (session != null) {
         // User is authenticated, check auth status
         context.read<AuthBloc>().add(CheckAuthStatusEvent());

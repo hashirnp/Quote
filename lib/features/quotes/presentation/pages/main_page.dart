@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../core/di/injection_container.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/widget_service.dart';
-import '../../../../core/di/injection_container.dart';
-import '../bloc/quotes_bloc.dart';
+import '../../../auth/presentation/pages/profile_page.dart';
 import '../bloc/browse_quotes_bloc.dart';
+import '../bloc/quotes_bloc.dart';
 import '../widgets/app_bars.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'browse_page.dart';
 import 'favorites_tab.dart';
-import '../../../auth/presentation/pages/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -155,33 +155,5 @@ class MainPageState extends State<MainPage> {
     // Index 3 is Settings/Profile page
   }
 
-  Widget _buildCreatePage() {
-    // Placeholder for create page - can be implemented later
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Create',
-          style: GoogleFonts.poppins(
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text(
-          'Create Page\n(Coming Soon)',
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
+  
 }

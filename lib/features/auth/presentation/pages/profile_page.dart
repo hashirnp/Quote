@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quote/core/constants/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../bloc/auth_bloc.dart';
+import 'edit_profile_page.dart';
 import '../../../quotes/presentation/pages/notification_settings_page.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 
@@ -11,15 +13,16 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
           'Profile',
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -74,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     state.user.fullName ?? 'User',
                     style: GoogleFonts.poppins(
-                      color: AppTheme.textPrimary,
+                      color: theme.textTheme.titleLarge?.color,
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
                     ),
@@ -84,24 +87,32 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     state.user.email ?? '',
                     style: GoogleFonts.poppins(
-                      color: AppTheme.textSecondary,
+                      color: theme.textTheme.bodyMedium?.color,
                       fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 40),
                   // Account Section
                   _buildSection(
+                    context: context,
                     title: 'ACCOUNT',
                     children: [
                       _buildMenuItem(
+                        context: context,
                         icon: Icons.person_outline,
-                        title: 'Edit Profile',
+                        title: AppStrings.editProfile,
                         onTap: () {
-                          // TODO: Navigate to edit profile
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditProfilePage(user: state.user),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 1),
                       _buildMenuItem(
+                        context: context,
                         icon: Icons.notifications_outlined,
                         title: 'Notification Settings',
                         onTap: () {
@@ -118,9 +129,11 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 32),
                   // Preferences Section
                   _buildSection(
+                    context: context,
                     title: 'PREFERENCES',
                     children: [
                       _buildMenuItem(
+                        context: context,
                         icon: Icons.palette_outlined,
                         title: 'Appearance & Settings',
                         onTap: () {
@@ -198,16 +211,18 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildSection({
+    required BuildContext context,
     required String title,
     required List<Widget> children,
   }) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
           style: GoogleFonts.poppins(
-            color: AppTheme.textSecondary,
+            color: theme.textTheme.bodyMedium?.color,
             fontSize: 12,
             fontWeight: FontWeight.w600,
             letterSpacing: 1,
@@ -216,7 +231,7 @@ class ProfilePage extends StatelessWidget {
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: AppTheme.cardBackground,
+            color: theme.cardTheme.color,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(children: children),
@@ -226,25 +241,27 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildMenuItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     Widget? trailing,
     VoidCallback? onTap,
   }) {
+    final theme = Theme.of(context);
     return ListTile(
-      leading: Icon(icon, color: AppTheme.textPrimary, size: 24),
+      leading: Icon(icon, color: theme.iconTheme.color, size: 24),
       title: Text(
         title,
         style: GoogleFonts.poppins(
-          color: AppTheme.textPrimary,
+          color: theme.textTheme.titleLarge?.color,
           fontSize: 16,
         ),
       ),
       trailing: trailing ??
           (onTap != null
-              ? const Icon(
+              ? Icon(
                   Icons.chevron_right,
-                  color: AppTheme.textSecondary,
+                  color: theme.textTheme.bodyMedium?.color,
                 )
               : null),
       onTap: onTap,
@@ -254,46 +271,49 @@ class ProfilePage extends StatelessWidget {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppTheme.cardBackground,
-        title: Text(
-          'Logout',
-          style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        content: Text(
-          'Are you sure you want to logout?',
-          style: GoogleFonts.poppins(
-            color: AppTheme.textSecondary,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.poppins(
-                color: AppTheme.textSecondary,
-              ),
+      builder: (dialogContext) {
+        final theme = Theme.of(dialogContext);
+        return AlertDialog(
+          backgroundColor: theme.cardTheme.color,
+          title: Text(
+            'Logout',
+            style: GoogleFonts.poppins(
+              color: theme.textTheme.titleLarge?.color,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              context.read<AuthBloc>().add(SignOutEvent());
-            },
-            child: Text(
-              'Logout',
-              style: GoogleFonts.poppins(
-                color: Colors.red,
-                fontWeight: FontWeight.w600,
-              ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: GoogleFonts.poppins(
+              color: theme.textTheme.bodyMedium?.color,
             ),
           ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(
+                  color: theme.textTheme.bodyMedium?.color,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                context.read<AuthBloc>().add(SignOutEvent());
+              },
+              child: Text(
+                'Logout',
+                style: GoogleFonts.poppins(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

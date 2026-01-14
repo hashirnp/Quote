@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/constants.dart';
+import '../../../../core/constants/app_strings.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -38,7 +39,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
             SizedBox(height: 24),
             Text(
-              'DAILY INSPIRATION',
+              AppStrings.dailyInspiration,
               style: TextStyle(
                 color: AppTheme.textPrimary,
                 fontSize: 24,

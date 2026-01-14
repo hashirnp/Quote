@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_theme.dart';
+
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/error_handler.dart';
 import '../bloc/browse_quotes_bloc.dart';
 import '../widgets/quote_card.dart';
@@ -56,19 +57,20 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppStrings.search,
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -107,9 +109,10 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -133,13 +136,13 @@ class _SearchPageState extends State<SearchPage> {
             child: TextField(
               controller: _searchController,
               style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 16,
               ),
               decoration: InputDecoration(
                 hintText: AppStrings.searchPlaceholder,
                 hintStyle: GoogleFonts.poppins(
-                  color: AppTheme.textSecondary,
+                  color: theme.textTheme.bodyMedium?.color,
                   fontSize: 16,
                 ),
                 border: InputBorder.none,
@@ -149,7 +152,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           if (_searchController.text.isNotEmpty)
             IconButton(
-              icon: const Icon(Icons.clear, color: AppTheme.textSecondary),
+              icon: Icon(Icons.clear, color: theme.textTheme.bodyMedium?.color),
               onPressed: () {
                 setState(() {
                   _searchController.clear();
@@ -181,6 +184,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildFilterTab(String label, int index) {
+    final theme = Theme.of(context);
     final isSelected = _selectedFilterIndex == index;
     return GestureDetector(
       onTap: () {
@@ -197,7 +201,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Text(
           label,
           style: GoogleFonts.poppins(
-            color: isSelected ? Colors.white : AppTheme.textSecondary,
+            color: isSelected ? Colors.white : theme.textTheme.bodyMedium?.color,
             fontSize: 14,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
@@ -223,7 +227,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Text(
                 '${AppStrings.quotesMatching} "${_searchController.text}"',
                 style: GoogleFonts.poppins(
-                  color: AppTheme.textPrimary,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
@@ -235,109 +239,6 @@ class _SearchPageState extends State<SearchPage> {
               )),
         ],
       ],
-    );
-  }
-
-  Widget _buildAuthorsSection(List<String> authors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              AppStrings.authors,
-              style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                // Show all authors
-              },
-              child: Text(
-                AppStrings.seeAll,
-                style: GoogleFonts.poppins(
-                  color: AppTheme.primaryBlue,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 120,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: authors.length > 2 ? 2 : authors.length,
-            itemBuilder: (context, index) {
-              return _buildAuthorCard(authors[index]);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAuthorCard(String author) {
-    return GestureDetector(
-      onTap: () {
-        // Filter quotes by selected author
-        setState(() {
-          _selectedAuthor = author;
-        });
-        context.read<BrowseQuotesBloc>().add(
-              FilterByAuthorEvent(author: author),
-            );
-        // Navigate back to browse page
-        Navigator.pop(context);
-      },
-      child: Container(
-        width: 100,
-        margin: const EdgeInsets.only(right: 12),
-        child: Column(
-          children: [
-            // Author Avatar
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.primaryBlue.withValues(alpha: 0.2),
-                border: Border.all(
-                  color: AppTheme.primaryBlue,
-                  width: 2,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  author[0].toUpperCase(),
-                  style: GoogleFonts.poppins(
-                    color: AppTheme.primaryBlue,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              author,
-              style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -353,10 +254,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildSkeletonCard() {
+    final theme = Theme.of(context);
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -366,7 +268,7 @@ class _SearchPageState extends State<SearchPage> {
             height: 120,
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.textSecondary.withValues(alpha: 0.2),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
@@ -375,7 +277,7 @@ class _SearchPageState extends State<SearchPage> {
             width: 150,
             margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: AppTheme.textSecondary.withValues(alpha: 0.2),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
@@ -385,6 +287,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildErrorState(String message) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -400,7 +303,7 @@ class _SearchPageState extends State<SearchPage> {
             Text(
               ErrorHandler.getErrorMessage(message),
               style: GoogleFonts.poppins(
-                color: AppTheme.textSecondary,
+                color: theme.textTheme.bodyMedium?.color,
                 fontSize: 16,
               ),
               textAlign: TextAlign.center,
@@ -418,7 +321,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Text(
                 AppStrings.retry,
                 style: GoogleFonts.poppins(
-                  color: AppTheme.textPrimary,
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -430,6 +333,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildEmptyState() {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -438,14 +342,14 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Icon(
               Icons.search_off,
-              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
               size: 80,
             ),
             const SizedBox(height: 24),
             Text(
               AppStrings.noQuotesFound,
               style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -454,7 +358,7 @@ class _SearchPageState extends State<SearchPage> {
             Text(
               AppStrings.noMatchesFound,
               style: GoogleFonts.poppins(
-                color: AppTheme.textSecondary,
+                color: theme.textTheme.bodyMedium?.color,
                 fontSize: 14,
               ),
               textAlign: TextAlign.center,

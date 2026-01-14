@@ -22,19 +22,20 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppStrings.moreCategories,
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -77,6 +78,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   }
 
   Widget _buildCategoryCard(Category category) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         context.read<BrowseQuotesBloc>().add(
@@ -89,7 +91,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.cardBackground,
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppTheme.primaryBlue.withValues(alpha: 0.3),
@@ -114,7 +116,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             Text(
               category.name,
               style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

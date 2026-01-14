@@ -42,6 +42,10 @@ class WidgetService {
       debugPrint(
           'Updating widget with quote: ${quote.text.substring(0, quote.text.length > 50 ? 50 : quote.text.length)}... by ${quote.author}');
 
+      // Get current theme mode from settings
+      final themeModeString = await sharedPreferences.getString('theme_mode') ?? 'dark';
+      final isDarkMode = themeModeString.contains('dark');
+
       // Save quote data to widget (home_widget uses SharedPreferences)
       await HomeWidget.saveWidgetData<String>('quote_text', quote.text);
       await HomeWidget.saveWidgetData<String>('quote_author', quote.author);
@@ -51,12 +55,14 @@ class WidgetService {
         DateTime.now().toIso8601String(),
       );
       await HomeWidget.saveWidgetData<int>('day_of_year', dayOfYear);
+      await HomeWidget.saveWidgetData<bool>('is_dark_mode', isDarkMode);
 
       // Also save directly to SharedPreferences as backup (for Android widget)
       // Flutter SharedPreferences stores keys with "flutter." prefix automatically
       // So 'widget_quote_text' becomes 'flutter.widget_quote_text' in FlutterSharedPreferences
       await sharedPreferences.setString('widget_quote_text', quote.text);
       await sharedPreferences.setString('widget_quote_author', quote.author);
+      await sharedPreferences.setBool('widget_is_dark_mode', isDarkMode);
 
       // Force commit to ensure data is written immediately
       await sharedPreferences.reload();

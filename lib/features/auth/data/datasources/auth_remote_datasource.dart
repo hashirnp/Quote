@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/errors/failures.dart';
 import '../models/user_model.dart';
@@ -50,9 +49,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'full_name': fullName,
         },
       );
-      log('SignUp response: ${response.toString()}');
-      log('Session: ${response.session}');
-      log('User: ${response.user}');
+      if (kDebugMode) {
+        debugPrint('SignUp response: ${response.toString()}');
+        debugPrint('Session: ${response.session}');
+        debugPrint('User: ${response.user}');
+      }
 
       if (response.user == null) {
         throw const ServerFailure('Failed to create user');
@@ -63,7 +64,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // The session will be created after email confirmation
       return UserModel.fromSupabaseUser(response.user!);
     } catch (e) {
-      log('SignUp error: $e');
+      debugPrint('SignUp error: $e');
       throw ServerFailure(e.toString());
     }
   }

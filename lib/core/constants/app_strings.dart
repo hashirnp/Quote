@@ -167,4 +167,9 @@ class AppStrings {
   static const String syncToProfile = 'Sync to profile';
   static const String settingsSynced = 'Settings synced to profile';
   static const String errorSyncingSettings = 'Failed to sync settings';
+
+  // Permissions
+  static const String permissionDenied =
+      'Permission denied. Please enable photo library access in Settings.';
+  static const String openSettings = 'Settings';
 }

@@ -64,11 +64,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppTheme.primaryBlue,
+              brightness: Theme.of(context).brightness,
+            ).copyWith(
               primary: AppTheme.primaryBlue,
               onPrimary: Colors.white,
-              surface: AppTheme.cardBackground,
-              onSurface: AppTheme.textPrimary,
+              surface: Theme.of(context).cardTheme.color,
+              onSurface: Theme.of(context).textTheme.titleLarge?.color ?? Colors.white,
             ),
           ),
           child: child!,
@@ -94,7 +97,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
           notificationTime: _notificationTime,
         );
       }
+      
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _notificationsEnabled
+                  ? 'Notification time saved successfully'
+                  : 'Notifications disabled',
+              style: GoogleFonts.poppins(color: Colors.white),
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
+      debugPrint('Error saving notification settings: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -112,19 +132,23 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.iconTheme.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppStrings.notificationSettingsTitle,
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -144,7 +168,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   // Enable Notifications Toggle
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.cardBackground,
+                      color: theme.cardTheme.color,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
@@ -156,7 +180,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       title: Text(
                         AppStrings.dailyQuoteNotifications,
                         style: GoogleFonts.poppins(
-                          color: AppTheme.textPrimary,
+                          color: theme.textTheme.titleLarge?.color,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -164,7 +188,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       subtitle: Text(
                         AppStrings.receiveDailyQuote,
                         style: GoogleFonts.poppins(
-                          color: AppTheme.textSecondary,
+                          color: theme.textTheme.bodyMedium?.color,
                           fontSize: 14,
                         ),
                       ),
@@ -176,7 +200,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           });
                           await _saveSettings();
                         },
-                        activeColor: AppTheme.primaryBlue,
+                        activeThumbColor: AppTheme.primaryBlue,
                       ),
                     ),
                   ),
@@ -186,7 +210,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     Text(
                       AppStrings.notificationTime,
                       style: GoogleFonts.poppins(
-                        color: AppTheme.textSecondary,
+                        color: theme.textTheme.bodyMedium?.color,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1,
@@ -195,7 +219,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     const SizedBox(height: 12),
                     Container(
                       decoration: BoxDecoration(
-                        color: AppTheme.cardBackground,
+                        color: theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ListTile(
@@ -207,7 +231,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         title: Text(
                           AppStrings.time,
                           style: GoogleFonts.poppins(
-                            color: AppTheme.textPrimary,
+                            color: theme.textTheme.titleLarge?.color,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -220,9 +244,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.chevron_right,
-                          color: AppTheme.textSecondary,
+                          color: theme.textTheme.bodyMedium?.color,
                         ),
                         onTap: _selectTime,
                       ),
@@ -251,7 +275,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                             child: Text(
                               AppStrings.notificationInfoMessage,
                               style: GoogleFonts.poppins(
-                                color: AppTheme.textPrimary,
+                                color: theme.textTheme.titleLarge?.color,
                                 fontSize: 14,
                               ),
                             ),

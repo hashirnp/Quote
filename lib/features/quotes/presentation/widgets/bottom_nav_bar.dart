@@ -14,11 +14,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      decoration: const BoxDecoration(
-        color: AppTheme.cardBackground,
+      decoration: BoxDecoration(
+        color: theme.cardTheme.color,
         border: Border(
-          top: BorderSide(color: AppTheme.darkBackground, width: 1),
+          top: BorderSide(
+            color: theme.scaffoldBackgroundColor,
+            width: 1,
+          ),
         ),
       ),
       child: BottomNavigationBar(
@@ -26,7 +30,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         selectedItemColor: AppTheme.primaryBlue,
-        unselectedItemColor: AppTheme.textSecondary,
+        unselectedItemColor: theme.textTheme.bodyMedium?.color,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 12,
         unselectedFontSize: 12,

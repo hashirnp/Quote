@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_theme.dart';
+
 import '../../../../core/constants/app_strings.dart';
-import '../../../../core/utils/share_helper.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/error_handler.dart';
 import '../../../../core/utils/settings_helper.dart';
-import '../bloc/quotes_bloc.dart';
-import '../pages/share_quote_page.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../domain/entities/quote.dart';
+import '../bloc/quotes_bloc.dart';
+import '../pages/share_quote_page.dart';
 
 class DailyQuoteWidget extends StatefulWidget {
   const DailyQuoteWidget({super.key});
@@ -69,11 +69,12 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
   }
 
   Widget _buildLoadingCard() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
       ),
       height: 200,
@@ -86,6 +87,9 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
   }
 
   Widget _buildQuoteCard(Quote quote, bool isFavorite) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       padding: const EdgeInsets.all(20),
@@ -93,14 +97,20 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppTheme.primaryBlue.withValues(alpha: 0.2),
-            AppTheme.primaryBlue.withValues(alpha: 0.1),
-          ],
+          colors: isDark
+              ? [
+                  AppTheme.primaryBlue.withValues(alpha: 0.2),
+                  AppTheme.primaryBlue.withValues(alpha: 0.1),
+                ]
+              : [
+                  AppTheme.primaryBlue.withValues(alpha: 0.15),
+                  AppTheme.primaryBlue.withValues(alpha: 0.08),
+                ],
         ),
+        color: isDark ? null : theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.primaryBlue.withValues(alpha: 0.3),
+          color: AppTheme.primaryBlue.withValues(alpha: isDark ? 0.3 : 0.2),
           width: 1,
         ),
       ),
@@ -113,7 +123,7 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.calendar_today,
                     size: 16,
                     color: AppTheme.primaryBlue,
@@ -134,7 +144,9 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
               IconButton(
                 icon: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : AppTheme.textSecondary,
+                  color: isFavorite
+                      ? Colors.red
+                      : Theme.of(context).textTheme.bodyMedium?.color,
                   size: 20,
                 ),
                 onPressed: () {
@@ -162,7 +174,7 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
               return Text(
                 quote.text,
                 style: GoogleFonts.poppins(
-                  color: AppTheme.textPrimary,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                   fontSize: fontSize,
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -181,7 +193,7 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
                 child: Text(
                   '— ${quote.author}',
                   style: GoogleFonts.poppins(
-                    color: AppTheme.textSecondary,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.italic,
@@ -215,11 +227,12 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
   }
 
   Widget _buildErrorCard(String errorMessage) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.red.withValues(alpha: 0.3),
@@ -238,7 +251,7 @@ class _DailyQuoteWidgetState extends State<DailyQuoteWidget> {
           Text(
             ErrorHandler.getErrorMessage(errorMessage),
             style: GoogleFonts.poppins(
-              color: AppTheme.textSecondary,
+              color: theme.textTheme.bodyMedium?.color,
               fontSize: 14,
             ),
             textAlign: TextAlign.center,

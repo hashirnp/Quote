@@ -65,9 +65,9 @@ class ThemeService {
         ),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.all(accent),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.all(accent),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return accent.withValues(alpha: 0.5);
           }
           return Colors.grey.withValues(alpha: 0.3);
@@ -125,9 +125,9 @@ class ThemeService {
         ),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.all(accent),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.all(accent),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return accent.withValues(alpha: 0.5);
           }
           return Colors.grey.withValues(alpha: 0.3);

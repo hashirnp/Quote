@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,18 +43,21 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
           context.read<CollectionsBloc>().add(const LoadCollectionsEvent());
         }
       },
       child: Scaffold(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: AppTheme.darkBackground,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).iconTheme.color,
+            ),
             onPressed: () {
               context.read<CollectionsBloc>().add(const LoadCollectionsEvent());
               Navigator.pop(context);
@@ -68,7 +69,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
               Text(
                 widget.collection.name,
                 style: GoogleFonts.poppins(
-                  color: AppTheme.textPrimary,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -77,7 +78,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 Text(
                   widget.collection.description!,
                   style: GoogleFonts.poppins(
-                    color: AppTheme.textSecondary,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                     fontSize: 12,
                   ),
                 ),
@@ -86,7 +87,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         ),
         body: BlocBuilder<CollectionsBloc, CollectionsState>(
           builder: (context, state) {
-            log('state: $state');
+            debugPrint('CollectionDetailPage state: $state');
             // Mark that we have quotes loaded when CollectionQuotesLoaded is emitted
             if (state is CollectionQuotesLoaded &&
                 state.collectionId == widget.collection.id) {
@@ -129,7 +130,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                     Text(
                       ErrorHandler.getErrorMessage(state.message),
                       style: GoogleFonts.poppins(
-                        color: AppTheme.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 16,
                       ),
                       textAlign: TextAlign.center,
@@ -229,20 +230,21 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   }
 
   Widget _buildEmptyState() {
+    final theme = Theme.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.inbox_outlined,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: (theme.textTheme.titleLarge?.color ?? Colors.white).withValues(alpha: 0.3),
             size: 80,
           ),
           const SizedBox(height: 24),
           Text(
             'No quotes in this collection',
             style: GoogleFonts.poppins(
-              color: AppTheme.textPrimary,
+              color: theme.textTheme.titleLarge?.color,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -251,7 +253,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
           Text(
             'Add quotes to this collection to see them here',
             style: GoogleFonts.poppins(
-              color: AppTheme.textSecondary,
+              color: theme.textTheme.bodyMedium?.color,
               fontSize: 14,
             ),
             textAlign: TextAlign.center,

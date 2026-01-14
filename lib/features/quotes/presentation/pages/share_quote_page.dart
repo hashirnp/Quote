@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,19 +28,20 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppTheme.textPrimary),
+          icon: Icon(Icons.close, color: theme.iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppStrings.shareQuote,
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -67,10 +67,11 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
   }
 
   Widget _buildPreviewSection() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -79,7 +80,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
           Text(
             AppStrings.preview,
             style: GoogleFonts.poppins(
-              color: AppTheme.textPrimary,
+              color: theme.textTheme.titleLarge?.color,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -111,13 +112,14 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
   }
 
   Widget _buildStyleSelection() {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.cardStyle,
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -140,7 +142,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppTheme.primaryBlue.withValues(alpha: 0.2)
-                          : AppTheme.cardBackground,
+                          : theme.cardTheme.color,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isSelected
@@ -155,7 +157,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
                           _getStyleIcon(style),
                           color: isSelected
                               ? AppTheme.primaryBlue
-                              : AppTheme.textSecondary,
+                              : theme.textTheme.bodyMedium?.color,
                           size: 32,
                         ),
                         const SizedBox(height: 8),
@@ -164,7 +166,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
                           style: GoogleFonts.poppins(
                             color: isSelected
                                 ? AppTheme.primaryBlue
-                                : AppTheme.textSecondary,
+                                : theme.textTheme.bodyMedium?.color,
                             fontSize: 14,
                             fontWeight:
                                 isSelected ? FontWeight.w600 : FontWeight.w400,
@@ -242,7 +244,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
           child: OutlinedButton(
             onPressed: _isSaving ? null : _saveToGallery,
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: AppTheme.primaryBlue, width: 2),
+              side: const BorderSide(color: AppTheme.primaryBlue, width: 2),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -280,7 +282,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
           child: Text(
             AppStrings.shareAsText,
             style: GoogleFonts.poppins(
-              color: AppTheme.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               fontSize: 14,
             ),
           ),
@@ -311,7 +313,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
         );
       }
     } catch (e) {
-      log('Error sharing quote: $e');
+      // Error logged via SnackBar display
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -359,8 +361,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
 
           String errorMessage = AppStrings.errorSavingQuotePermissions;
           if (permission.isPermanentlyDenied) {
-            errorMessage =
-                'Permission denied. Please enable photo library access in Settings.';
+            errorMessage = AppStrings.permissionDenied;
           }
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -373,7 +374,7 @@ class _ShareQuotePageState extends State<ShareQuotePage> {
               duration: const Duration(seconds: 4),
               action: permission.isPermanentlyDenied
                   ? SnackBarAction(
-                      label: 'Settings',
+                      label: AppStrings.openSettings,
                       textColor: Colors.white,
                       onPressed: () {
                         openAppSettings();

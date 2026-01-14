@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:saver_gallery/saver_gallery.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:saver_gallery/saver_gallery.dart';
+import 'package:screenshot/screenshot.dart';
+
 import '../../features/quotes/domain/entities/quote.dart';
 import '../../features/quotes/presentation/widgets/quote_card_templates.dart';
 

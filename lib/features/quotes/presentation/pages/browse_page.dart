@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -59,11 +57,12 @@ class _BrowsePageState extends State<BrowsePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: BlocBuilder<BrowseQuotesBloc, BrowseQuotesState>(
@@ -74,7 +73,7 @@ class _BrowsePageState extends State<BrowsePage> {
 
             if (hasCategoryFilter) {
               return IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+                icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
                 onPressed: () {
                   context
                       .read<BrowseQuotesBloc>()
@@ -84,7 +83,7 @@ class _BrowsePageState extends State<BrowsePage> {
             }
 
             return IconButton(
-              icon: const Icon(Icons.search, color: AppTheme.textPrimary),
+              icon: Icon(Icons.search, color: theme.iconTheme.color),
               onPressed: () async {
                 await Navigator.push(
                   context,
@@ -105,7 +104,7 @@ class _BrowsePageState extends State<BrowsePage> {
             return Text(
               title,
               style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -122,7 +121,7 @@ class _BrowsePageState extends State<BrowsePage> {
 
               if (hasCategoryFilter) {
                 return IconButton(
-                  icon: const Icon(Icons.close, color: AppTheme.textPrimary),
+                  icon: Icon(Icons.close, color: theme.iconTheme.color),
                   onPressed: () {
                     context
                         .read<BrowseQuotesBloc>()
@@ -133,7 +132,7 @@ class _BrowsePageState extends State<BrowsePage> {
               }
 
               return IconButton(
-                icon: const Icon(Icons.tune, color: AppTheme.textPrimary),
+                icon: Icon(Icons.tune, color: theme.iconTheme.color),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -150,7 +149,7 @@ class _BrowsePageState extends State<BrowsePage> {
           if (state is BrowseQuotesLoading) {
             return _buildLoadingState();
           } else if (state is BrowseQuotesError) {
-            log('BrowseQuotesError: ${state.message}');
+            debugPrint('BrowseQuotesError: ${state.message}');
             return _buildErrorState(state.message);
           } else if (state is BrowseQuotesLoaded) {
             if (state.quotes.isEmpty) {
@@ -239,11 +238,12 @@ class _BrowsePageState extends State<BrowsePage> {
   }
 
   Widget _buildSkeletonCard() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -254,7 +254,7 @@ class _BrowsePageState extends State<BrowsePage> {
             height: 80,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppTheme.textSecondary.withValues(alpha: 0.2),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
@@ -264,7 +264,7 @@ class _BrowsePageState extends State<BrowsePage> {
             height: 16,
             width: 150,
             decoration: BoxDecoration(
-              color: AppTheme.textSecondary.withValues(alpha: 0.2),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
@@ -276,7 +276,7 @@ class _BrowsePageState extends State<BrowsePage> {
                 height: 12,
                 width: 60,
                 decoration: BoxDecoration(
-                  color: AppTheme.textSecondary.withValues(alpha: 0.2),
+                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -285,7 +285,7 @@ class _BrowsePageState extends State<BrowsePage> {
                 height: 12,
                 width: 60,
                 decoration: BoxDecoration(
-                  color: AppTheme.textSecondary.withValues(alpha: 0.2),
+                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -297,6 +297,7 @@ class _BrowsePageState extends State<BrowsePage> {
   }
 
   Widget _buildErrorState(String message) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -312,7 +313,7 @@ class _BrowsePageState extends State<BrowsePage> {
             Text(
               ErrorHandler.getErrorMessage(message),
               style: GoogleFonts.poppins(
-                color: AppTheme.textSecondary,
+                color: theme.textTheme.bodyMedium?.color,
                 fontSize: 16,
               ),
               textAlign: TextAlign.center,
@@ -330,7 +331,7 @@ class _BrowsePageState extends State<BrowsePage> {
               child: Text(
                 AppStrings.retry,
                 style: GoogleFonts.poppins(
-                  color: AppTheme.textPrimary,
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -342,6 +343,7 @@ class _BrowsePageState extends State<BrowsePage> {
   }
 
   Widget _buildEmptyState() {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -351,7 +353,7 @@ class _BrowsePageState extends State<BrowsePage> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppTheme.cardBackground,
+                color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -362,11 +364,11 @@ class _BrowsePageState extends State<BrowsePage> {
                     height: 120,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppTheme.textSecondary.withValues(alpha: 0.1),
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.1),
                     ),
                     child: Icon(
                       Icons.search_off,
-                      color: AppTheme.textSecondary.withValues(alpha: 0.5),
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                       size: 60,
                     ),
                   ),
@@ -374,7 +376,7 @@ class _BrowsePageState extends State<BrowsePage> {
                   Text(
                     AppStrings.noQuotesFound,
                     style: GoogleFonts.poppins(
-                      color: AppTheme.textPrimary,
+                      color: theme.textTheme.titleLarge?.color,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -383,7 +385,7 @@ class _BrowsePageState extends State<BrowsePage> {
                   Text(
                     AppStrings.noMatchesFound,
                     style: GoogleFonts.poppins(
-                      color: AppTheme.textSecondary,
+                      color: theme.textTheme.bodyMedium?.color,
                       fontSize: 14,
                     ),
                     textAlign: TextAlign.center,

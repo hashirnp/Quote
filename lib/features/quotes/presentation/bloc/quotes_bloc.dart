@@ -505,8 +505,8 @@ class QuotesBloc extends Bloc<QuotesEvent, QuotesState> {
 
     // Load both in parallel
     await Future.wait([
-      _onLoadLikedQuotes(LoadLikedQuotesEvent(), emit),
-      _onLoadFavorites(LoadFavoritesEvent(), emit),
+      _onLoadLikedQuotes(const LoadLikedQuotesEvent(), emit),
+      _onLoadFavorites(const LoadFavoritesEvent(), emit),
     ]);
   }
 

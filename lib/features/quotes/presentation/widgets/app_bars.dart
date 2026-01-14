@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/constants/app_strings.dart';
 
 class TodayAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TodayAppBar({super.key});
@@ -12,7 +13,7 @@ class TodayAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
-        'DAILY INSPIRATION',
+        AppStrings.dailyInspiration,
         style: GoogleFonts.poppins(
           color: AppTheme.textPrimary,
           fontSize: 18,
@@ -54,21 +55,20 @@ class FavoritesAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppTheme.darkBackground,
-      elevation: 0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, elevation: 0,
       scrolledUnderElevation: 0,
       leading: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back,
-          color: AppTheme.textPrimary,
+          color: Theme.of(context).textTheme.titleLarge?.color,
           size: 24,
         ),
         onPressed: onBackPressed,
       ),
-      title: const Text(
-        'Your Favorites',
+      title: Text(
+        AppStrings.yourFavorites,
         style: TextStyle(
-          color: AppTheme.textPrimary,
+          color: Theme.of(context).textTheme.titleLarge?.color,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),

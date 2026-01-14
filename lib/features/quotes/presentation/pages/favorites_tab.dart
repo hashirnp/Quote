@@ -75,13 +75,14 @@ class _FavoritesTabState extends State<FavoritesTab>
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: (theme.textTheme.titleLarge?.color ?? Colors.white).withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -91,7 +92,7 @@ class _FavoritesTabState extends State<FavoritesTab>
             padding: const EdgeInsets.only(left: 16),
             child: Icon(
               Icons.search,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: (theme.textTheme.titleLarge?.color ?? Colors.white).withValues(alpha: 0.5),
               size: 20,
             ),
           ),
@@ -99,13 +100,13 @@ class _FavoritesTabState extends State<FavoritesTab>
             child: TextField(
               controller: _searchController,
               style: GoogleFonts.poppins(
-                color: Colors.white,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 15,
               ),
               decoration: InputDecoration(
                 hintText: AppStrings.filterPlaceholder,
                 hintStyle: GoogleFonts.poppins(
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: (theme.textTheme.titleLarge?.color ?? Colors.white).withValues(alpha: 0.3),
                   fontSize: 15,
                 ),
                 border: InputBorder.none,
@@ -125,7 +126,7 @@ class _FavoritesTabState extends State<FavoritesTab>
             IconButton(
               icon: Icon(
                 Icons.clear,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: (theme.textTheme.titleLarge?.color ?? Colors.white).withValues(alpha: 0.5),
                 size: 20,
               ),
               onPressed: () {
@@ -141,10 +142,11 @@ class _FavoritesTabState extends State<FavoritesTab>
   }
 
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TabBar(
@@ -156,7 +158,7 @@ class _FavoritesTabState extends State<FavoritesTab>
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.textSecondary,
+        unselectedLabelColor: theme.textTheme.bodyMedium?.color,
         labelStyle: GoogleFonts.poppins(
           fontSize: 15,
           fontWeight: FontWeight.w600,
@@ -400,7 +402,7 @@ class _FavoritesTabState extends State<FavoritesTab>
             Text(
               'Create Collection',
               style: GoogleFonts.poppins(
-                color: AppTheme.textPrimary,
+                color: Theme.of(context).textTheme.titleLarge?.color,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -474,7 +476,7 @@ class _FavoritesTabState extends State<FavoritesTab>
                   IconButton(
                     icon: Icon(
                       Icons.more_vert_rounded,
-                      color: AppTheme.textSecondary.withValues(alpha: 0.7),
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       size: 20,
                     ),
                     padding: EdgeInsets.zero,
@@ -490,7 +492,7 @@ class _FavoritesTabState extends State<FavoritesTab>
                   Text(
                     collection.name,
                     style: GoogleFonts.poppins(
-                      color: AppTheme.textPrimary,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -502,7 +504,7 @@ class _FavoritesTabState extends State<FavoritesTab>
                     Text(
                       collection.description!,
                       style: GoogleFonts.poppins(
-                        color: AppTheme.textSecondary.withValues(alpha: 0.8),
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                         fontSize: 11,
                       ),
                       maxLines: 2,
@@ -515,13 +517,13 @@ class _FavoritesTabState extends State<FavoritesTab>
                       Icon(
                         Icons.format_quote_rounded,
                         size: 14,
-                        color: AppTheme.textSecondary.withValues(alpha: 0.6),
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${collection.quoteCount} quotes',
                         style: GoogleFonts.poppins(
-                          color: AppTheme.textSecondary.withValues(alpha: 0.8),
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -547,9 +549,10 @@ class _FavoritesTabState extends State<FavoritesTab>
   }
 
   void _showCollectionMenu(BuildContext context, Collection collection) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.cardBackground,
+      backgroundColor: theme.cardTheme.color,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -571,7 +574,7 @@ class _FavoritesTabState extends State<FavoritesTab>
                   leading: const Icon(Icons.edit, color: AppTheme.primaryBlue),
                   title: Text(
                     'Edit Collection',
-                    style: GoogleFonts.poppins(color: AppTheme.textPrimary),
+                    style: GoogleFonts.poppins(color: theme.textTheme.titleLarge?.color),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -604,27 +607,28 @@ class _FavoritesTabState extends State<FavoritesTab>
   }
 
   void _showDeleteConfirmation(BuildContext context, Collection collection) {
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.cardBackground,
+        backgroundColor: theme.cardTheme.color,
         title: Text(
           'Delete Collection',
           style: GoogleFonts.poppins(
-            color: AppTheme.textPrimary,
+            color: theme.textTheme.titleLarge?.color,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: Text(
           'Are you sure you want to delete "${collection.name}"? This action cannot be undone.',
-          style: GoogleFonts.poppins(color: AppTheme.textSecondary),
+          style: GoogleFonts.poppins(color: theme.textTheme.bodyMedium?.color),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               AppStrings.cancel,
-              style: GoogleFonts.poppins(color: AppTheme.textSecondary),
+              style: GoogleFonts.poppins(color: theme.textTheme.bodyMedium?.color),
             ),
           ),
           TextButton(

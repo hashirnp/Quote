@@ -16,7 +16,7 @@ class SocialLoginButton extends StatelessWidget {
     return Container(
       width: 56,
       height: 56,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppTheme.textPrimary,
         shape: BoxShape.circle,
       ),

@@ -165,6 +165,12 @@ class NotificationService {
     // but in a non-blocking way using unawaited futures
     await _scheduleNotificationsInBackground(scheduleDataList, now);
 
+    // Save notification time preference first (even if scheduling fails)
+    await _storageService.saveString(
+      AppConstants.notificationTimeKey,
+      '$hour:$minute',
+    );
+
     // Update widget with today's quote
     try {
       final widgetService = getIt<WidgetService>();
@@ -173,12 +179,6 @@ class NotificationService {
       // Widget service might not be available, ignore
       debugPrint('Error updating widget from notification scheduling: $e');
     }
-
-    // Save notification time preference
-    await _storageService.saveString(
-      AppConstants.notificationTimeKey,
-      '$hour:$minute',
-    );
   }
 
   Future<void> _scheduleNotificationsInBackground(

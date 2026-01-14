@@ -128,9 +128,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     if (state is Authenticated) {
+      // Save current state before emitting loading
+      final currentState = state as Authenticated;
       emit(AuthLoading());
       try {
-        final currentState = state as Authenticated;
         final updatedUser = await updateProfile(
           userId: currentState.user.id,
           fullName: event.fullName,
